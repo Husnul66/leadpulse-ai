@@ -13,11 +13,26 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
+# Define allowed origins for CORS (combining local Next.js dev server and settings)
+origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+# Safely extend with settings if BACKEND_CORS_ORIGINS is defined
+if hasattr(settings, "BACKEND_CORS_ORIGINS") and settings.BACKEND_CORS_ORIGINS:
+    if isinstance(settings.BACKEND_CORS_ORIGINS, list):
+        for origin in settings.BACKEND_CORS_ORIGINS:
+            if str(origin) not in origins:
+                origins.append(str(origin))
+    elif isinstance(settings.BACKEND_CORS_ORIGINS, str):
+        if settings.BACKEND_CORS_ORIGINS not in origins:
+            origins.append(settings.BACKEND_CORS_ORIGINS)
+
 # CORS Configuration
-# Configured dynamically from settings to allow Next.js / Vite / React frontends
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.BACKEND_CORS_ORIGINS if isinstance(settings.BACKEND_CORS_ORIGINS, list) else [settings.BACKEND_CORS_ORIGINS],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
