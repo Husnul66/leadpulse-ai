@@ -1,4 +1,5 @@
 from app.schemas.lead import (
+    LeadStatus,
     LeadBase,
     LeadCreate,
     LeadUpdate,
@@ -11,6 +12,7 @@ from app.schemas.message import (
 )
 
 __all__ = [
+    "LeadStatus",
     "LeadBase",
     "LeadCreate",
     "LeadUpdate",

@@ -125,3 +125,41 @@ uvicorn app.main:app --reload --port 8000
 - **ReDoc Dokümantasyon:** [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
 - **Sağlık Kontrolü (Health Check):** [http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)
 - **DB Bağlantı Testi:** [http://127.0.0.1:8000/health/db](http://127.0.0.1:8000/health/db)
+
+---
+
+## 📋 Gün 2: Lead Modülü API Endpoint'leri
+
+Lead modülü `/api/v1/leads` önekiyle sunulur:
+
+| Metot | Endpoint | Durum | Açıklama |
+|---|---|---|---|
+| `POST` | `/api/v1/leads/` | `201 Created` | Yeni lead kaydı oluşturur |
+| `GET` | `/api/v1/leads/` | `200 OK` | Tüm lead'leri listeler (`skip`, `limit`, `status` filtresi) |
+| `GET` | `/api/v1/leads/{lead_id}` | `200 OK` | ID'ye göre tekil lead getirir (404 kontrolü) |
+| `PUT` | `/api/v1/leads/{lead_id}` | `200 OK` | Lead bilgilerini ve durumunu günceller |
+| `DELETE` | `/api/v1/leads/{lead_id}` | `204 No Content` | Lead'i ve ilişkili mesajları siler |
+
+### Örnek İstekler (cURL):
+
+```bash
+# 1. Yeni Lead Oluşturma
+curl -X POST "http://127.0.0.1:8000/api/v1/leads/" \
+     -H "Content-Type: application/json" \
+     -d '{"company_name": "Acme Corp", "company_url": "acme.com", "target_audience": "B2B SaaS Founders", "status": "pending"}'
+
+# 2. Lead Listeleme (Sayfalama ve Durum Filtresi)
+curl -X GET "http://127.0.0.1:8000/api/v1/leads/?skip=0&limit=50&status=pending"
+
+# 3. Tekil Lead Getirme
+curl -X GET "http://127.0.0.1:8000/api/v1/leads/1"
+
+# 4. Lead Güncelleme
+curl -X PUT "http://127.0.0.1:8000/api/v1/leads/1" \
+     -H "Content-Type: application/json" \
+     -d '{"status": "generated"}'
+
+# 5. Lead Silme
+curl -X DELETE "http://127.0.0.1:8000/api/v1/leads/1"
+```
+
