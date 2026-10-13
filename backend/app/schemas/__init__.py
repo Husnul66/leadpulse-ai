@@ -6,6 +6,8 @@ from app.schemas.lead import (
     LeadResponse,
 )
 from app.schemas.message import (
+    OutreachChannel,
+    MessageGenerateRequest,
     GeneratedMessageBase,
     GeneratedMessageCreate,
     GeneratedMessageResponse,
@@ -17,6 +19,8 @@ __all__ = [
     "LeadCreate",
     "LeadUpdate",
     "LeadResponse",
+    "OutreachChannel",
+    "MessageGenerateRequest",
     "GeneratedMessageBase",
     "GeneratedMessageCreate",
     "GeneratedMessageResponse",

@@ -163,3 +163,42 @@ curl -X PUT "http://127.0.0.1:8000/api/v1/leads/1" \
 curl -X DELETE "http://127.0.0.1:8000/api/v1/leads/1"
 ```
 
+---
+
+## 🤖 Day 3: AI Outreach Generation Endpoints
+
+AI-powered outreach generation integrates Google Gemini (`gemini-2.5-flash`) via the `google-genai` SDK:
+
+| Method | Endpoint | Status | Description |
+|---|---|---|---|
+| `POST` | `/api/v1/leads/{lead_id}/generate` | `201 Created` | Generates a personalized outreach message using Gemini AI, saves it to `generated_messages`, and sets lead status to `generated`. |
+| `GET` | `/api/v1/leads/{lead_id}/messages` | `200 OK` | Retrieves all message generation history for a specific lead. |
+
+### Example AI Generation Requests (cURL):
+
+```bash
+# 1. Generate a Personalized Cold Email for Lead #1
+curl -X POST "http://127.0.0.1:8000/api/v1/leads/1/generate" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "outreach_channel": "cold_email",
+       "sender_name": "Sarah Connor",
+       "sender_company": "LeadPulse AI",
+       "value_proposition": "We help sales teams 3x their outbound pipeline with automated personalization.",
+       "additional_instructions": "Focus on their recent expansion and keep the tone conversational."
+     }'
+
+# 2. Generate a LinkedIn InMail for Lead #1
+curl -X POST "http://127.0.0.1:8000/api/v1/leads/1/generate" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "outreach_channel": "linkedin",
+       "sender_name": "Sarah Connor",
+       "sender_company": "LeadPulse AI"
+     }'
+
+# 3. List All Messages Generated for Lead #1
+curl -X GET "http://127.0.0.1:8000/api/v1/leads/1/messages"
+```
+
+
