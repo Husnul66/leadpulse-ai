@@ -24,6 +24,8 @@ export default function Home() {
   // AI Generation Modal / Drawer state
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [channel, setChannel] = useState<"cold_email" | "linkedin" | "twitter_dm">("cold_email");
+  const [senderName, setSenderName] = useState("");
+  const [valueProposition, setValueProposition] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedMessages, setGeneratedMessages] = useState<GeneratedMessage[]>([]);
   const [activeTab, setActiveTab] = useState<"generate" | "history">("generate");
@@ -76,7 +78,11 @@ export default function Home() {
 
     try {
       setIsGenerating(true);
-      await generateMessage(selectedLead.id, { outreach_channel: channel });
+      await generateMessage(selectedLead.id, {
+        outreach_channel: channel,
+        sender_name: senderName.trim() || undefined,
+        value_proposition: valueProposition.trim() || undefined,
+      });
       // Refresh messages history for this lead
       const messages = await fetchLeadMessages(selectedLead.id);
       setGeneratedMessages(messages);
@@ -292,6 +298,28 @@ export default function Home() {
                       <option value="linkedin">LinkedIn InMail / Connection Note</option>
                       <option value="twitter_dm">Twitter / X Direct Message</option>
                     </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-slate-400 mb-1">Sender Name (Optional)</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Alex Morgan"
+                      value={senderName}
+                      onChange={(e) => setSenderName(e.target.value)}
+                      className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-slate-400 mb-1">Value Proposition (Optional)</label>
+                    <textarea
+                      rows={2}
+                      placeholder="e.g. We help B2B teams triple meeting booking rates via automated outbound personalization."
+                      value={valueProposition}
+                      onChange={(e) => setValueProposition(e.target.value)}
+                      className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 resize-none"
+                    />
                   </div>
 
                   <button
